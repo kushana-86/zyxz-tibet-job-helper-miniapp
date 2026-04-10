@@ -1,0 +1,84 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">COMPARE</view>
+    <view class="hero-title">择域比选</view>
+    <view class="hero-desc">输入多个区县后，会识别名称并按交通便利度和基础分进行展示。底部收藏页里的对比池也可以直接带过来使用。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">输入区县</view>
+    <textarea
+      class="input-box"
+      maxlength="-1"
+      placeholder="例如：米林市、巴宜区、贡嘎县、桑珠孜区"
+      value="{{inputText}}"
+      bindinput="onInputChange"
+    />
+    <view class="actions">
+      <button class="btn btn-primary" bindtap="handleCompare">开始比较</button>
+      <button class="btn btn-secondary" bindtap="fillSample">填入示例</button>
+      <button class="btn btn-ghost" bindtap="clearInput">清空</button>
+    </view>
+    <view wx:if="{{errorMessage}}" class="error-box">{{errorMessage}}</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">对比池</view>
+    <view wx:if="{{comparePool.length}}" class="county-list">
+      <view wx:for="{{comparePool}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="actions">
+          <button class="btn btn-ghost small-btn" data-name="{{item.name}}" bindtap="toggleComparePool">移出对比池</button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">搜索页或收藏页里可把区县加入对比池，最多 3 个。</view>
+    <view class="actions">
+      <button class="btn btn-secondary" bindtap="useComparePool">使用对比池</button>
+      <button class="btn btn-ghost" bindtap="clearComparePool">清空对比池</button>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{recognized.length}}">
+    <view class="section-title">识别结果</view>
+    <view class="tag-row">
+      <text wx:for="{{recognized}}" wx:key="*this" class="tag">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{results.length}}">
+    <view class="section-title">比较结果</view>
+    <view class="county-list">
+      <view wx:for="{{results}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">#{{index + 1}} {{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · 最近机场 {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            基础分
+            <text class="score-number">{{item.baseScore}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="county-summary">{{item.cityAccess}}</view>
+        <view class="county-summary">{{item.airportAccess}}</view>
+        <view class="actions">
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleComparePool">
+            {{item.isCompared ? '移出对比池' : '加入对比池'}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

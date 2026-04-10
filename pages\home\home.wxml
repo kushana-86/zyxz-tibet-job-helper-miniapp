@@ -1,0 +1,77 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">PLATEAU COUNTY GUIDE</view>
+    <view class="hero-title">择域先知</view>
+    <view class="hero-desc">
+      面向区县信息检索、交通判断和候选地区比较的多页面工作台。现在支持底部 tab 切换、数据库优先读取，以及搜索时直接显示距市区和机场远近判断。
+    </view>
+    <view class="hero-meta">名称已调整为更通用的展示方式，避免“比较”类命名带来的审核风险。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">数据概览</view>
+    <view class="stat-grid" wx:if="{{stats}}">
+      <view class="stat-card">
+        <view class="stat-label">区县条目</view>
+        <view class="stat-value">{{stats.countyCount}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">覆盖地市</view>
+        <view class="stat-value">{{stats.cityCount}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">收藏候选</view>
+        <view class="stat-value">{{stats.favoriteCount}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">对比池</view>
+        <view class="stat-value">{{stats.compareCount}}</view>
+      </view>
+    </view>
+    <view class="source-badge">当前数据源：{{sourceMode === 'cloud' ? '云数据库' : '本地回退数据'}}</view>
+    <view wx:if="{{errorMessage}}" class="error-box">{{errorMessage}}</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">交通条件较优</view>
+    <view class="section-desc">这部分优先展示机场、铁路或主干公路条件更成熟的县区，适合快速浏览。</view>
+    <view class="county-list">
+      <view wx:for="{{featured}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · 最近机场 {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="tag-row">
+          <text class="tag">{{item.cityAccess}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{!featured.length && !loading}}" class="empty-text">暂无可展示数据。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">偏远与边境提醒</view>
+    <view class="section-desc">这一组更适合提前关注出行成本、边境属性和高海拔风险。</view>
+    <view class="county-list">
+      <view wx:for="{{remoteFeatured}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}}</view>
+          </view>
+        </view>
+        <view class="county-summary">{{item.airportAccess}}</view>
+        <view class="tag-row">
+          <text wx:for="{{item.riskFlags}}" wx:key="*this" class="risk-tag">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

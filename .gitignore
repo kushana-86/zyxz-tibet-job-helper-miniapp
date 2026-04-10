@@ -1,0 +1,14 @@
+# WeChat DevTools local config
+project.private.config.json
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dependencies
+node_modules/

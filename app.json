@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/search/search",
+    "pages/compare/compare",
+    "pages/favorites/favorites"
+  ],
+  "window": {
+    "navigationBarTitleText": "择域先知",
+    "navigationBarBackgroundColor": "#0f4c3a",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f3efe6",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#6f6b61",
+    "selectedColor": "#0f4c3a",
+    "backgroundColor": "#fffaf1",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "总览"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "搜索"
+      },
+      {
+        "pagePath": "pages/compare/compare",
+        "text": "比较"
+      },
+      {
+        "pagePath": "pages/favorites/favorites",
+        "text": "收藏"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

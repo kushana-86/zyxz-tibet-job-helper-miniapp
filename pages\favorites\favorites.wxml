@@ -1,0 +1,59 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">FAVORITES</view>
+    <view class="hero-title">择域收藏</view>
+    <view class="hero-desc">这里集中管理你看中的区县，以及准备放到比较页一起看的对比池。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">收藏候选</view>
+    <view wx:if="{{favoriteList.length}}" class="county-list">
+      <view wx:for="{{favoriteList}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="actions">
+          <button class="btn btn-ghost small-btn" data-name="{{item.name}}" bindtap="toggleFavorite">取消收藏</button>
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleCompare">
+            {{item.isCompared ? '移出对比池' : '加入对比池'}}
+          </button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">还没有收藏区县，可以到搜索页加入。</view>
+    <view class="actions">
+      <button class="btn btn-ghost" bindtap="clearFavorites">清空收藏</button>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">对比池</view>
+    <view wx:if="{{compareList.length}}" class="county-list">
+      <view wx:for="{{compareList}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+        </view>
+        <view class="county-summary">{{item.cityAccess}}</view>
+        <view class="county-summary">{{item.airportAccess}}</view>
+        <view class="actions">
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleCompare">移出对比池</button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">当前对比池为空，搜索页和比较页都可以加入。</view>
+    <view class="actions">
+      <button class="btn btn-ghost" bindtap="clearComparePool">清空对比池</button>
+    </view>
+  </view>
+</view>
