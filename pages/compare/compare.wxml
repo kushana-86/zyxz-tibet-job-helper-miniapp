@@ -1,0 +1,165 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">COMPARE</view>
+    <view class="hero-title">区县快选对比</view>
+    <view class="hero-desc">
+      把你犹豫的 2 到 3 个区县放到一起看。页面会按综合适宜度、通达效率、海拔友好度、工作半径和稳定性自动排序，帮你在有限时间里更快做取舍。
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">输入区县</view>
+    <view class="section-desc">建议一次比较 2 到 3 个区县，排序结果会更清晰。</view>
+    <textarea
+      class="input-box"
+      maxlength="-1"
+      placeholder="例如：米林市、巴宜区、贡嘎县"
+      value="{{inputText}}"
+      bindinput="onInputChange"
+    />
+    <view class="actions">
+      <button class="btn btn-primary" bindtap="handleCompare">开始对比</button>
+      <button class="btn btn-secondary" bindtap="fillSample">填入示例</button>
+      <button class="btn btn-ghost" bindtap="clearInput">清空</button>
+    </view>
+    <view wx:if="{{errorMessage}}" class="error-box">{{errorMessage}}</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">对比池</view>
+    <view class="section-desc">你可以从搜索页先加入候选区县，再回到这里集中比较。</view>
+    <view wx:if="{{comparePool.length}}" class="county-list">
+      <view wx:for="{{comparePool}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            基础分
+            <text class="score-number">{{item.baseScore}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="actions">
+          <button class="btn btn-ghost small-btn" data-name="{{item.name}}" bindtap="toggleComparePool">移出对比池</button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">搜索页里把区县加入对比后，这里会自动带过来，最多 3 个。</view>
+    <view class="actions">
+      <button class="btn btn-secondary" bindtap="useComparePool">使用对比池</button>
+      <button class="btn btn-ghost" bindtap="clearComparePool">清空对比池</button>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{recognized.length}}">
+    <view class="section-title">已识别区县</view>
+    <view class="tag-row">
+      <text wx:for="{{recognized}}" wx:key="*this" class="tag">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{summary}}">
+    <view class="section-title">决策速览</view>
+    <view class="summary-hero">
+      <view class="summary-rank">优先建议</view>
+      <view class="summary-name">{{summary.topName}}</view>
+      <view class="summary-desc">{{summary.topAdvice}}</view>
+    </view>
+    <view class="metric-winner-list">
+      <view wx:for="{{summary.metricWinners}}" wx:key="label" class="metric-winner-card">
+        <view class="metric-winner-label">{{item.label}}</view>
+        <view class="metric-winner-name">{{item.names}}</view>
+      </view>
+    </view>
+    <view class="matrix-list">
+      <view wx:for="{{summary.comparisonRows}}" wx:key="label" class="matrix-row">
+        <view class="matrix-label">{{item.label}}</view>
+        <view class="matrix-values">
+          <text wx:for="{{item.values}}" wx:key="*this" class="matrix-chip">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{results.length}}">
+    <view class="section-title">详细对比</view>
+    <view class="compare-list">
+      <view wx:for="{{results}}" wx:key="name" class="compare-card">
+        <view class="compare-head">
+          <view>
+            <view class="compare-name">#{{item.rank}} {{item.name}}</view>
+            <view class="compare-subtitle">{{item.city}} · 最近机场 {{item.nearestAirport}}</view>
+          </view>
+          <view class="decision-pill">
+            综合适宜度
+            <text class="decision-score">{{item.metrics.decisionScore}}</text>
+          </view>
+        </view>
+
+        <view class="tag-row" wx:if="{{item.highlights.length}}">
+          <text wx:for="{{item.highlights}}" wx:key="*this" class="highlight-tag">{{item}}</text>
+        </view>
+
+        <view class="tag-row" wx:if="{{item.decisionTags.length}}">
+          <text wx:for="{{item.decisionTags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+
+        <view class="score-grid">
+          <view wx:for="{{item.scoreItems}}" wx:key="label" class="score-card">
+            <view class="score-label">{{item.label}}</view>
+            <view class="score-value">{{item.value}}</view>
+          </view>
+        </view>
+
+        <view class="decision-note">{{item.decisionAdvice}}</view>
+
+        <view wx:for="{{item.decisionSummary}}" wx:key="*this" class="compare-line">{{item}}</view>
+
+        <view class="divider"></view>
+
+        <view class="compare-line">{{item.transportSummary}}</view>
+        <view class="compare-line">{{item.cityAccess}}</view>
+        <view class="compare-line">{{item.airportAccess}}</view>
+
+        <view class="meta-grid">
+          <view class="meta-card">
+            <view class="meta-label">海拔</view>
+            <view class="meta-value">{{item.elevation}}m</view>
+          </view>
+          <view class="meta-card">
+            <view class="meta-label">交通基础</view>
+            <view class="meta-value">{{item.transport}}</view>
+          </view>
+          <view class="meta-card" wx:if="{{item.jobInfo && item.jobInfo.avgDistanceHours !== null}}">
+            <view class="meta-label">平均跑点</view>
+            <view class="meta-value">{{item.jobInfo.avgDistanceHours}}h</view>
+          </view>
+          <view class="meta-card" wx:if="{{item.jobInfo && item.jobInfo.maxDistanceHours !== null}}">
+            <view class="meta-label">最远跑点</view>
+            <view class="meta-value">{{item.jobInfo.maxDistanceHours}}h</view>
+          </view>
+          <view class="meta-card" wx:if="{{item.population}}">
+            <view class="meta-label">常住人口</view>
+            <view class="meta-value">{{item.population}}</view>
+          </view>
+          <view class="meta-card" wx:if="{{item.areaKm2}}">
+            <view class="meta-label">面积</view>
+            <view class="meta-value">{{item.areaKm2}} km²</view>
+          </view>
+        </view>
+
+        <view class="tag-row" wx:if="{{item.riskFlags.length}}">
+          <text wx:for="{{item.riskFlags}}" wx:key="*this" class="risk-tag">{{item}}</text>
+        </view>
+
+        <view class="actions">
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleComparePool">
+            {{item.isCompared ? '移出对比池' : '加入对比池'}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -9,7 +9,7 @@
     "navigationBarTitleText": "择域先知",
     "navigationBarBackgroundColor": "#0f4c3a",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f3efe6",
+    "backgroundColor": "#f8f3e8",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
@@ -28,11 +28,11 @@
       },
       {
         "pagePath": "pages/compare/compare",
-        "text": "比较"
+        "text": "对比"
       },
       {
         "pagePath": "pages/favorites/favorites",
-        "text": "收藏"
+        "text": "候选"
       }
     ]
   },

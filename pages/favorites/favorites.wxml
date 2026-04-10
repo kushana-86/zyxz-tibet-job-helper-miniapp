@@ -1,0 +1,79 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">FAVORITES</view>
+    <view class="hero-title">候选与对比池</view>
+    <view class="hero-desc">这里集中管理你已经看中的区县，以及准备带去对比页一起比较的候选列表。</view>
+    <view class="hero-meta">收藏区是长期备选，对比池更适合临时拉 2 到 3 个区县做快选。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-head">
+      <view>
+        <view class="section-title">收藏候选</view>
+        <view class="section-desc">适合先把看着不错的区县放进来，后面再慢慢筛。</view>
+      </view>
+      <view class="section-badge">{{favoriteList.length}} 个</view>
+    </view>
+    <view wx:if="{{favoriteList.length}}" class="county-list">
+      <view wx:for="{{favoriteList}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="tag-row">
+          <text class="tag" wx:if="{{item.population}}">人口 {{item.population}}</text>
+          <text class="tag" wx:if="{{item.areaKm2}}">面积 {{item.areaKm2}} km²</text>
+        </view>
+        <view class="actions">
+          <button class="btn btn-ghost small-btn" data-name="{{item.name}}" bindtap="toggleFavorite">取消收藏</button>
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleCompare">
+            {{item.isCompared ? '移出对比池' : '加入对比池'}}
+          </button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">还没有收藏区县，可以先去搜索页加一些候选。</view>
+    <view class="actions">
+      <button class="btn btn-ghost" bindtap="clearFavorites">清空收藏</button>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-head">
+      <view>
+        <view class="section-title">对比池</view>
+        <view class="section-desc">建议保持在 2 到 3 个区县，进入对比页时会更容易看出差距。</view>
+      </view>
+      <view class="section-badge">{{compareList.length}} / 3</view>
+    </view>
+    <view wx:if="{{compareList.length}}" class="county-list">
+      <view wx:for="{{compareList}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+        </view>
+        <view class="county-summary">{{item.cityAccess}}</view>
+        <view class="county-summary">{{item.airportAccess}}</view>
+        <view class="tag-row">
+          <text wx:for="{{item.riskFlags}}" wx:key="*this" class="risk-tag">{{item}}</text>
+        </view>
+        <view class="actions">
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleCompare">移出对比池</button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-text">当前对比池还是空的，搜索页和对比页都可以加入候选。</view>
+    <view class="actions">
+      <button class="btn btn-ghost" bindtap="clearComparePool">清空对比池</button>
+    </view>
+  </view>
+</view>

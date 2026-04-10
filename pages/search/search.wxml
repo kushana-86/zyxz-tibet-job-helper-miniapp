@@ -1,0 +1,154 @@
+<view class="shell">
+  <view class="hero-card">
+    <view class="hero-eyebrow">SEARCH</view>
+    <view class="hero-title">区县搜索</view>
+    <view class="hero-desc">搜索区县、地市、机场、边境、交通特征或新增的在线资料字段，结果会直接给出适合选岗判断的核心信息。</view>
+    <view class="hero-meta">当前优先读取：{{sourceMode === 'cloud' ? '云数据库' : '本地回退数据'}}</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-title">关键词</view>
+    <input
+      class="search-box"
+      type="text"
+      placeholder="输入区县、地市、机场、官网、邮编或交通关键词"
+      value="{{keyword}}"
+      bindinput="onKeywordChange"
+    />
+    <view class="chip-row">
+      <view
+        wx:for="{{quickKeywords}}"
+        wx:key="*this"
+        class="chip"
+        data-keyword="{{item}}"
+        bindtap="applyQuickKeyword"
+      >
+        {{item}}
+      </view>
+    </view>
+    <view class="actions">
+      <button class="btn btn-ghost" bindtap="clearSearch">清空</button>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{results.length}}">
+    <view class="section-title">搜索结果</view>
+    <view class="county-list">
+      <view wx:for="{{results}}" wx:key="name" class="county-card">
+        <view class="county-head" data-name="{{item.name}}" bindtap="selectResult">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.cityAccess}}</view>
+        <view class="county-summary" wx:if="{{item.population || item.areaKm2}}">
+          {{item.population ? '人口 ' + item.population : ''}}{{item.population && item.areaKm2 ? ' · ' : ''}}{{item.areaKm2 ? '面积 ' + item.areaKm2 + ' km²' : ''}}
+        </view>
+        <view class="actions">
+          <button class="btn btn-ghost small-btn" data-name="{{item.name}}" bindtap="toggleFavorite">
+            {{item.isFavorite ? '取消收藏' : '加入收藏'}}
+          </button>
+          <button class="btn btn-secondary small-btn" data-name="{{item.name}}" bindtap="toggleCompare">
+            {{item.isCompared ? '移出对比' : '加入对比'}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{selected}}">
+    <view class="section-title">区县详情</view>
+    <view class="detail-grid">
+      <view class="detail-card">
+        <view class="detail-label">区县</view>
+        <view class="detail-value">{{selected.name}}</view>
+      </view>
+      <view class="detail-card">
+        <view class="detail-label">所属地市</view>
+        <view class="detail-value">{{selected.city || '暂无'}}</view>
+      </view>
+      <view class="detail-card">
+        <view class="detail-label">最近机场</view>
+        <view class="detail-value">{{selected.nearestAirport}}</view>
+      </view>
+      <view class="detail-card">
+        <view class="detail-label">交通便利度</view>
+        <view class="detail-value">{{selected.convenienceLevel}}</view>
+      </view>
+      <view class="detail-card">
+        <view class="detail-label">基础海拔</view>
+        <view class="detail-value">{{selected.elevation}}m</view>
+      </view>
+      <view class="detail-card">
+        <view class="detail-label">交通基础</view>
+        <view class="detail-value">{{selected.transport}}</view>
+      </view>
+      <view class="detail-card" wx:if="{{selected.population}}">
+        <view class="detail-label">常住人口</view>
+        <view class="detail-value">{{selected.population}}{{selected.populationAsOf ? '（' + selected.populationAsOf + '）' : ''}}</view>
+      </view>
+      <view class="detail-card" wx:if="{{selected.areaKm2}}">
+        <view class="detail-label">面积</view>
+        <view class="detail-value">{{selected.areaKm2}} km²</view>
+      </view>
+      <view class="detail-card" wx:if="{{selected.postalCode}}">
+        <view class="detail-label">邮编</view>
+        <view class="detail-value">{{selected.postalCode}}</view>
+      </view>
+    </view>
+
+    <view class="detail-stack">
+      <view class="info-card" wx:if="{{selected.onlineDescription}}">
+        <view class="section-title">在线资料摘要</view>
+        <view class="intro-text">{{selected.onlineDescription}}</view>
+        <view class="intro-text" wx:if="{{selected.parentRegion}}">上级区域：{{selected.parentRegion}}</view>
+        <view class="intro-text" wx:if="{{selected.officialWebsite}}">官网：{{selected.officialWebsite}}</view>
+      </view>
+
+      <view class="info-card">
+        <view class="section-title">交通分析</view>
+        <view class="intro-text">{{selected.transportSummary}}</view>
+        <view class="intro-text">{{selected.cityAccess}}</view>
+        <view class="intro-text">{{selected.airportAccess}}</view>
+      </view>
+
+      <view class="info-card" wx:if="{{selected.transportNetwork}}">
+        <view class="section-title">通道基础</view>
+        <view class="intro-text">{{selected.transportNetwork}}</view>
+        <view class="intro-text">{{selected.transportContext}}</view>
+      </view>
+
+      <view class="info-card" wx:if="{{selected.jobInfo}}">
+        <view class="section-title">县域摘要</view>
+        <view class="intro-text">驻地：{{selected.jobInfo.seat || '暂无'}}，乡镇数：{{selected.jobInfo.townCount || '暂无'}}。</view>
+        <view class="intro-text" wx:if="{{selected.jobInfo.avgDistanceHours !== null}}">
+          县域内部平均通行约 {{selected.jobInfo.avgDistanceHours}} 小时，最远通行约 {{selected.jobInfo.maxDistanceHours || '暂无'}} 小时。
+        </view>
+        <view class="tag-row" wx:if="{{selected.jobInfo.tags.length}}">
+          <text wx:for="{{selected.jobInfo.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="info-card" wx:if="{{selected.riskFlags.length}}">
+        <view class="section-title">风险提示</view>
+        <view class="tag-row">
+          <text wx:for="{{selected.riskFlags}}" wx:key="*this" class="risk-tag">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="info-card" wx:if="{{selected.sourceUrl}}">
+        <view class="section-title">数据来源</view>
+        <view class="intro-text">在线结构化资料来源：{{selected.sourceUrl}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{keyword && !results.length}}">
+    <view class="empty-text">没有匹配结果，可以试试输入地市、机场、官网、邮编或更短的区县关键词。</view>
+  </view>
+</view>

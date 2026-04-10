@@ -1,27 +1,64 @@
 page {
+  --bg-top: #f8f3e8;
+  --bg-bottom: #efe4cf;
+  --surface: rgba(255, 252, 246, 0.94);
+  --surface-strong: #fffdf8;
+  --ink: #173126;
+  --ink-soft: #665844;
+  --ink-faint: #8e7d65;
+  --brand: #0f4c3a;
+  --brand-soft: #2b6955;
+  --accent: #ca8f34;
+  --accent-soft: #f4e1b7;
+  --line: rgba(15, 76, 58, 0.08);
+  --line-strong: rgba(15, 76, 58, 0.14);
+  --danger-bg: #fff2ea;
+  --danger-text: #95441b;
   background:
-    radial-gradient(circle at top, rgba(211, 169, 104, 0.22), transparent 34%),
-    linear-gradient(180deg, #f3efe6 0%, #efe5d1 100%);
-  color: #173126;
+    radial-gradient(circle at 10% 0%, rgba(202, 143, 52, 0.18), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(15, 76, 58, 0.12), transparent 22%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  color: var(--ink);
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 .shell {
   min-height: 100vh;
-  padding: 28rpx 24rpx 44rpx;
+  padding: 22rpx 20rpx 48rpx;
   box-sizing: border-box;
 }
 
 .hero-card,
 .panel {
-  border-radius: 28rpx;
-  box-shadow: 0 18rpx 36rpx rgba(40, 38, 24, 0.08);
+  border-radius: 32rpx;
+  box-shadow:
+    0 24rpx 54rpx rgba(43, 34, 16, 0.08),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.4);
 }
 
 .hero-card {
-  padding: 32rpx;
-  background: linear-gradient(135deg, #0f4c3a 0%, #276955 58%, #ca8f34 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 28rpx;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255, 249, 239, 0.22), transparent 26%),
+    linear-gradient(135deg, #0f4c3a 0%, #1f5c48 52%, #ca8f34 100%);
   color: #fff9ef;
+}
+
+.hero-home {
+  padding-bottom: 24rpx;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  right: -70rpx;
+  top: -70rpx;
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 50%;
+  background: rgba(255, 249, 239, 0.07);
 }
 
 .hero-eyebrow {
@@ -29,62 +66,72 @@ page {
   padding: 8rpx 16rpx;
   border-radius: 999rpx;
   background: rgba(255, 249, 239, 0.14);
-  font-size: 20rpx;
+  font-size: 19rpx;
   letter-spacing: 2rpx;
 }
 
 .hero-title {
-  margin-top: 20rpx;
-  font-size: 46rpx;
+  position: relative;
+  margin-top: 18rpx;
+  font-size: 42rpx;
+  line-height: 1.2;
   font-weight: 700;
 }
 
 .hero-desc {
-  margin-top: 16rpx;
-  font-size: 28rpx;
-  line-height: 1.65;
+  position: relative;
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  line-height: 1.64;
   color: rgba(255, 249, 239, 0.92);
 }
 
 .hero-meta {
-  margin-top: 18rpx;
-  font-size: 24rpx;
+  position: relative;
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  line-height: 1.56;
   color: rgba(255, 249, 239, 0.78);
 }
 
 .panel {
-  margin-top: 22rpx;
-  padding: 26rpx;
-  background: rgba(255, 251, 245, 0.92);
-  backdrop-filter: blur(10rpx);
+  margin-top: 18rpx;
+  padding: 22rpx;
+  background: var(--surface);
+  border: 1rpx solid rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14rpx);
 }
 
 .section-title {
-  font-size: 32rpx;
+  font-size: 30rpx;
+  line-height: 1.3;
   font-weight: 700;
-  color: #173126;
+  color: var(--ink);
 }
 
 .section-desc {
-  margin-top: 10rpx;
-  font-size: 24rpx;
+  margin-top: 8rpx;
+  font-size: 23rpx;
   line-height: 1.6;
-  color: #6d614a;
+  color: var(--ink-soft);
 }
 
 .stat-grid,
 .detail-grid,
-.compare-grid {
+.compare-grid,
+.meta-grid,
+.score-grid,
+.metric-winner-list {
   display: grid;
   gap: 16rpx;
 }
 
 .stat-grid,
-.detail-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.compare-grid {
+.detail-grid,
+.compare-grid,
+.meta-grid,
+.score-grid,
+.metric-winner-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -92,67 +139,85 @@ page {
 .detail-card,
 .county-card,
 .compare-card,
-.info-card {
-  border-radius: 22rpx;
-  background: #fffdf8;
-  border: 2rpx solid rgba(15, 76, 58, 0.08);
+.info-card,
+.meta-card,
+.score-card,
+.metric-winner-card,
+.matrix-row {
+  border-radius: 24rpx;
+  background: var(--surface-strong);
+  border: 2rpx solid var(--line);
 }
 
 .stat-card,
 .detail-card,
 .compare-card,
-.info-card {
-  padding: 20rpx;
+.info-card,
+.meta-card,
+.score-card,
+.metric-winner-card,
+.matrix-row {
+  padding: 18rpx;
 }
 
 .stat-label,
 .detail-label,
-.meta-label {
-  font-size: 22rpx;
-  color: #7f7155;
+.meta-label,
+.score-label,
+.metric-winner-label,
+.matrix-label {
+  font-size: 21rpx;
+  color: var(--ink-faint);
 }
 
 .stat-value,
-.detail-value {
+.detail-value,
+.meta-value,
+.score-value,
+.metric-winner-name {
   margin-top: 8rpx;
-  font-size: 30rpx;
+  font-size: 28rpx;
+  line-height: 1.3;
   font-weight: 700;
-  color: #173126;
+  color: var(--ink);
 }
 
 .input-box,
 .search-box {
   width: 100%;
   box-sizing: border-box;
-  background: #fffdf8;
-  border: 2rpx solid #d8ccb7;
+  background: var(--surface-strong);
+  border: 2rpx solid rgba(120, 101, 65, 0.16);
   border-radius: 22rpx;
-  font-size: 28rpx;
+  font-size: 26rpx;
+  color: var(--ink);
 }
 
 .input-box {
-  min-height: 220rpx;
-  padding: 22rpx;
-  line-height: 1.7;
+  min-height: 196rpx;
+  padding: 20rpx;
+  line-height: 1.65;
 }
 
 .search-box {
-  height: 88rpx;
-  padding: 0 22rpx;
+  height: 84rpx;
+  padding: 0 20rpx;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 14rpx;
-  margin-top: 18rpx;
+  gap: 12rpx;
+  margin-top: 16rpx;
 }
 
 .btn {
   margin: 0;
-  padding: 0 28rpx;
+  padding: 0 24rpx;
   border-radius: 999rpx;
-  font-size: 26rpx;
+  font-size: 24rpx;
+  line-height: 2.28;
+  font-weight: 600;
 }
 
 .btn::after {
@@ -160,13 +225,15 @@ page {
 }
 
 .btn-primary {
-  background: #0f4c3a;
+  background: linear-gradient(180deg, var(--brand-soft) 0%, var(--brand) 100%);
   color: #fff9ef;
+  box-shadow: 0 10rpx 20rpx rgba(15, 76, 58, 0.16);
 }
 
 .btn-secondary {
-  background: #ca8f34;
+  background: linear-gradient(180deg, #d9a14b 0%, var(--accent) 100%);
   color: #fff9ef;
+  box-shadow: 0 10rpx 20rpx rgba(202, 143, 52, 0.18);
 }
 
 .btn-ghost {
@@ -175,36 +242,46 @@ page {
 }
 
 .small-btn {
-  font-size: 24rpx;
-  line-height: 1.8;
-  padding: 0 22rpx;
+  font-size: 23rpx;
+  line-height: 2;
+  padding: 0 18rpx;
 }
 
 .chip-row,
-.tag-row {
+.tag-row,
+.matrix-values {
   display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
-  margin-top: 16rpx;
+  gap: 10rpx;
+  margin-top: 14rpx;
 }
 
 .chip,
 .tag,
-.risk-tag {
-  padding: 10rpx 18rpx;
+.risk-tag,
+.matrix-chip,
+.highlight-tag {
+  padding: 8rpx 16rpx;
   border-radius: 999rpx;
-  font-size: 22rpx;
+  font-size: 21rpx;
+  line-height: 1.4;
 }
 
 .chip,
-.tag {
+.tag,
+.matrix-chip {
   background: #e8f1ec;
   color: #23533f;
 }
 
 .chip.active {
-  background: #0f4c3a;
+  background: var(--brand);
   color: #fff9ef;
+}
+
+.highlight-tag {
+  background: #fff0d8;
+  color: #8b5a12;
 }
 
 .risk-tag {
@@ -214,100 +291,122 @@ page {
 
 .helper-text,
 .empty-text,
-.meta-text {
-  font-size: 24rpx;
-  line-height: 1.65;
-  color: #6d614a;
+.meta-text,
+.summary-desc {
+  font-size: 23rpx;
+  line-height: 1.6;
+  color: var(--ink-soft);
 }
 
 .error-box {
   margin-top: 16rpx;
   padding: 18rpx 20rpx;
   border-radius: 18rpx;
-  background: #fff2ea;
-  color: #95441b;
+  background: var(--danger-bg);
+  color: var(--danger-text);
   font-size: 25rpx;
 }
 
-.county-list {
+.county-list,
+.compare-list,
+.detail-stack,
+.matrix-list {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
-  margin-top: 18rpx;
+  gap: 14rpx;
+  margin-top: 16rpx;
 }
 
-.county-card {
-  padding: 22rpx;
+.county-card,
+.compare-card {
+  padding: 18rpx;
 }
 
 .county-head,
 .compare-head {
   display: flex;
   justify-content: space-between;
-  gap: 16rpx;
+  gap: 14rpx;
+  align-items: flex-start;
 }
 
 .county-name,
-.compare-name {
-  font-size: 31rpx;
+.compare-name,
+.summary-name {
+  font-size: 30rpx;
+  line-height: 1.3;
   font-weight: 700;
-  color: #173126;
+  color: var(--ink);
 }
 
 .county-subtitle,
-.compare-subtitle {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #85755a;
+.compare-subtitle,
+.summary-rank {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  line-height: 1.5;
+  color: var(--ink-faint);
 }
 
-.county-score {
+.county-score,
+.decision-pill {
   min-width: 112rpx;
   text-align: center;
-  padding: 14rpx 12rpx;
+  padding: 12rpx 12rpx;
   border-radius: 18rpx;
   background: linear-gradient(180deg, #173126 0%, #2b5c49 100%);
   color: #fff9ef;
-  font-size: 22rpx;
+  font-size: 20rpx;
+  box-shadow: 0 12rpx 24rpx rgba(23, 49, 38, 0.14);
 }
 
-.score-number {
+.score-number,
+.decision-score {
   display: block;
-  margin-top: 6rpx;
+  margin-top: 4rpx;
   font-size: 30rpx;
   font-weight: 700;
 }
 
 .county-summary,
 .compare-line,
-.intro-text {
-  margin-top: 12rpx;
-  font-size: 25rpx;
-  line-height: 1.65;
+.intro-text,
+.decision-note {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  line-height: 1.62;
   color: #5d4f39;
 }
 
-.detail-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-  margin-top: 18rpx;
+.summary-hero {
+  margin-top: 16rpx;
+  padding: 20rpx;
+  border-radius: 26rpx;
+  background: linear-gradient(135deg, rgba(15, 76, 58, 0.08), rgba(202, 143, 52, 0.18));
+  border: 2rpx solid rgba(202, 143, 52, 0.14);
+}
+
+.decision-note {
+  padding: 14rpx 16rpx;
+  border-radius: 18rpx;
+  background: #eef5ef;
+  color: #23533f;
 }
 
 .divider {
   height: 2rpx;
   margin: 18rpx 0;
-  background: rgba(15, 76, 58, 0.08);
+  background: var(--line-strong);
 }
 
 .source-badge {
   display: inline-block;
-  margin-top: 14rpx;
+  margin-top: 12rpx;
   padding: 8rpx 16rpx;
   border-radius: 999rpx;
-  background: #f0e2c5;
+  background: var(--accent-soft);
   color: #72541b;
-  font-size: 22rpx;
+  font-size: 21rpx;
 }
 
 .link-text {
@@ -315,10 +414,120 @@ page {
   color: #9f491a;
 }
 
+.banner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.banner-card {
+  padding: 16rpx;
+  border-radius: 22rpx;
+  background: linear-gradient(180deg, rgba(255, 253, 248, 0.95), rgba(249, 241, 227, 0.95));
+  border: 2rpx solid rgba(15, 76, 58, 0.07);
+}
+
+.banner-kicker {
+  font-size: 20rpx;
+  color: var(--ink-faint);
+}
+
+.banner-main {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.banner-sub {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  line-height: 1.52;
+  color: var(--ink-soft);
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12rpx;
+}
+
+.section-badge {
+  padding: 7rpx 14rpx;
+  border-radius: 999rpx;
+  background: #e8f1ec;
+  color: #23533f;
+  font-size: 21rpx;
+}
+
 @media (max-width: 520px) {
   .compare-grid,
   .detail-grid,
-  .stat-grid {
+  .stat-grid,
+  .meta-grid,
+  .score-grid,
+  .metric-winner-list,
+  .banner-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell {
+    padding: 18rpx 16rpx 40rpx;
+  }
+
+  .hero-card {
+    padding: 24rpx;
+    border-radius: 28rpx;
+  }
+
+  .panel {
+    padding: 18rpx;
+    border-radius: 26rpx;
+  }
+
+  .hero-title {
+    font-size: 38rpx;
+  }
+
+  .hero-desc {
+    font-size: 24rpx;
+    line-height: 1.58;
+  }
+
+  .hero-meta,
+  .section-desc,
+  .helper-text,
+  .empty-text,
+  .meta-text,
+  .summary-desc {
+    font-size: 22rpx;
+  }
+
+  .county-card,
+  .compare-card,
+  .stat-card,
+  .detail-card,
+  .info-card,
+  .meta-card,
+  .score-card,
+  .metric-winner-card,
+  .matrix-row {
+    padding: 16rpx;
+  }
+
+  .county-name,
+  .compare-name,
+  .summary-name {
+    font-size: 28rpx;
+  }
+
+  .county-summary,
+  .compare-line,
+  .intro-text,
+  .decision-note {
+    font-size: 23rpx;
   }
 }

@@ -1,0 +1,104 @@
+<view class="shell">
+  <view class="hero-card hero-home">
+    <view class="hero-eyebrow">PLATEAU COUNTY GUIDE</view>
+    <view class="hero-title">择域先知</view>
+    <view class="hero-desc">
+      先看整体，再搜候选，最后进对比页快选区县。首页只保留最值得先看的信息，减少来回翻动。
+    </view>
+    <view class="hero-meta">首屏优先帮你判断现在该去搜索，还是该直接开始对比。</view>
+
+    <view class="banner-grid" wx:if="{{stats}}">
+      <view class="banner-card">
+        <view class="banner-kicker">区县条目</view>
+        <view class="banner-main">{{stats.countyCount}}</view>
+        <view class="banner-sub">当前可直接搜索和比较的数据范围</view>
+      </view>
+      <view class="banner-card">
+        <view class="banner-kicker">已覆盖地市</view>
+        <view class="banner-main">{{stats.cityCount}}</view>
+        <view class="banner-sub">支持横向看交通、海拔和稳定性</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="section-head">
+      <view class="section-title">当前进度</view>
+      <view class="section-badge">一眼总览</view>
+    </view>
+    <view class="stat-grid" wx:if="{{stats}}">
+      <view class="stat-card">
+        <view class="stat-label">收藏候选</view>
+        <view class="stat-value">{{stats.favoriteCount}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">对比池</view>
+        <view class="stat-value">{{stats.compareCount}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">数据来源</view>
+        <view class="stat-value">{{sourceMode === 'cloud' ? '云端' : '本地'}}</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-label">建议动作</view>
+        <view class="stat-value">{{stats.compareCount ? '去对比' : '先搜索'}}</view>
+      </view>
+    </view>
+    <view class="source-badge">当前数据源：{{sourceMode === 'cloud' ? '云数据库' : '本地回退数据'}}</view>
+    <view wx:if="{{errorMessage}}" class="error-box">{{errorMessage}}</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-head">
+      <view>
+        <view class="section-title">更适合优先看</view>
+        <view class="section-desc">优先展示交通条件和整体便利度更成熟的区县，适合先建立第一梯队。</view>
+      </view>
+      <view class="section-badge">通达优先</view>
+    </view>
+    <view class="county-list">
+      <view wx:for="{{featured}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}} · 最近机场 {{item.nearestAirport}}</view>
+          </view>
+          <view class="county-score">
+            便利度
+            <text class="score-number">{{item.convenienceLevel}}</text>
+          </view>
+        </view>
+        <view class="county-summary">{{item.transportSummary}}</view>
+        <view class="tag-row">
+          <text class="tag">{{item.cityAccess}}</text>
+          <text class="tag" wx:if="{{item.population}}">人口 {{item.population}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{!featured.length && !loading}}" class="empty-text">暂时没有可展示的数据。</view>
+  </view>
+
+  <view class="panel">
+    <view class="section-head">
+      <view>
+        <view class="section-title">需要提前留意</view>
+        <view class="section-desc">偏远、边境或高海拔因素更明显的区县，建议在进入最终候选前单独评估。</view>
+      </view>
+      <view class="section-badge">风险提示</view>
+    </view>
+    <view class="county-list">
+      <view wx:for="{{remoteFeatured}}" wx:key="name" class="county-card">
+        <view class="county-head">
+          <view>
+            <view class="county-name">{{item.name}}</view>
+            <view class="county-subtitle">{{item.city}}</view>
+          </view>
+        </view>
+        <view class="county-summary">{{item.airportAccess}}</view>
+        <view class="tag-row">
+          <text wx:for="{{item.riskFlags}}" wx:key="*this" class="risk-tag">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
